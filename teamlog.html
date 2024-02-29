@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Team Log</h1>
+        <ul id="teamLog"></ul>
+        <a href="index.html">Back to Team Generator</a>
+    </div>
+
+    <script>
+        function displayTeamLog() {
+            var teamLog = document.getElementById('teamLog');
+            var allTeams = JSON.parse(localStorage.getItem('teamLog')) || [];
+
+            teamLog.innerHTML = '';
+
+            allTeams.forEach((team, index) => {
+                var listItem = document.createElement('li');
+                var teamsHTML = `
+                    <div><strong>Queue ${index + 1}</strong></div>
+                    <div><strong>Survivors:</strong> ${team.team1.join(', ')}</div>
+                    <div><strong>Infected:</strong> ${team.team2.join(', ')}</div>
+                `;
+                listItem.innerHTML = teamsHTML;
+                teamLog.appendChild(listItem);
+            });
+        }
+
+        // Call function to display team log when the page loads
+        displayTeamLog();
+    </script>
+</body>
+</html>

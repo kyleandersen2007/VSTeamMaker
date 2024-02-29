@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Team Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #teams {
+            margin-top: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .team {
+            margin-bottom: 20px;
+        }
+        .team-header {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Random Team Generator</h1>
+        <div class="input-section">
+            <label for="playerNames">Enter Player Names (comma separated):</label>
+            <input type="text" id="playerNames" placeholder="Player 1, Player 2, Player 3, ...">
+            <button onclick="generateTeams()">Generate Teams</button>
+        </div>
+        <div id="teams"></div>
+        <a href="teamlog.html">Team Log</a>
+    </div>
+
+    <script>
+        function generateTeams() {
+            var input = document.getElementById('playerNames').value;
+            var players = input.split(',').map(name => name.trim());
+            
+            // Remove empty strings from the array
+            players = players.filter(player => player !== '');
+
+            if (players.length !== 8) {
+                alert("Please enter 8 player names separated by commas.");
+                return;
+            }
+
+            var shuffled = players.sort(() => Math.random() - 0.5);
+            var team1 = shuffled.slice(0, 4);
+            var team2 = shuffled.slice(4, 8);
+
+            var teamsHTML = `
+                <div class="team">
+                    <div class="team-header">Survivors</div>
+                    <ul>
+                        ${team1.map(player => `<li>${player}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="team">
+                    <div class="team-header">Infected</div>
+                    <ul>
+                        ${team2.map(player => `<li>${player}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById('teams').innerHTML = teamsHTML;
+
+            // Save teams to local storage
+            saveTeamsToLocalStorage(team1, team2);
+        }
+
+        function saveTeamsToLocalStorage(team1, team2) {
+            var allTeams = JSON.parse(localStorage.getItem('teamLog')) || [];
+
+            allTeams.push({ team1: team1, team2: team2 });
+            localStorage.setItem('teamLog', JSON.stringify(allTeams));
+        }
+    </script>
+</body>
+</html>
